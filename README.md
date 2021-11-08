@@ -1,15 +1,20 @@
 
-This helm chart is usefull for kubernetes workshops, where participants
+This helm chart is usefull for kubernetes workshops, where participants only need a browser. Each user gets its own namespace, and a browser based terminal with preconfigured shell.
 
 ## Features
 
+- no installation on participants machine (I expect you have a browser)
 - preinstalled tools: kubectl, helm, jq, jid, micro, ...
 - bash-autocompletion for: k, kubectl, helm
+- prompt shows actual ctx and namespace
 - nvim: with k8s yaml support
+- webdav support for session FS. edit files directly from VSCode with [remote-workspace plugin](https://marketplace.visualstudio.com/items?itemName=Liveecommerce.vscode-remote-workspace)
 - reach the session via:
   - ingress: http://userx.mydomain.com
-  - nodePort: http://n1.mydomain.com:31234 (in case the ingress dropsconnections)
+  - nodePort: http://n1.mydomain.com:31234 (in case the ingress drops connections)
   - ssh: with the help of https://github.com/lalyos/k8s-sshfront
+- hint from presenter session
+- "lazy" mode: participants types `lazy` to execute presenter's last command
 
 ## Prereq
 
@@ -87,5 +92,7 @@ $ ssh-pubkey <your-github-username>
 ```
 
 ## Todo
+- [ ] include webdav sharing
+- [ ] switch on k8s-prompt by default
 - [ ] integrate automatic route53 entries
 - [ ] fix ssh-pubkey output to use dns
