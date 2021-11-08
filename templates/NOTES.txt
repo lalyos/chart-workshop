@@ -1,0 +1,16 @@
+Workshop environment has beencreated.
+
+User sessions:
+{{ range $user := until (int .Values.users) }}
+http://user{{ $user }}.{{ $.Values.dns }}
+
+{{- end }}
+
+With NodePort:
+{{ range $index, $svc :=  (lookup "v1" "Service" "workshop" "").items   }}
+  {{- with $svc.metadata.labels}}
+  {{- with .user}}
+- {{ . }} : http://n1.{{ $.Values.dns }}:{{ (index $svc.spec.ports 0).nodePort }}
+  {{- end}}
+  {{- end}}
+{{- end }}

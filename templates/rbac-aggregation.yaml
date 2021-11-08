@@ -1,0 +1,28 @@
+## aggregate all cluster role with matching labels to all users
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: aggregate-to-all-user
+aggregationRule:
+  clusterRoleSelectors:
+  - matchLabels:
+      aggregate-to-all-user: "true"
+rules: null
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: crb-aggregate-to-all-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: aggregate-to-all-user
+subjects:
+{{ range $user := until (int .Values.users) }}
+- kind: ServiceAccount
+  name: sa-user{{ $user }}
+  namespace: workshop
+{{end}}
+
+

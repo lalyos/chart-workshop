@@ -1,0 +1,25 @@
+# ---
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: workshop
+# spec: {}
+
+{{ range $user := until (int .Values.users) }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sa-user{{ $user }}
+  namespace: workshop
+  labels:
+    user: user{{ $user }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: user{{ $user }}
+  labels:
+    user: user{{ $user }}
+spec: {}
+{{- end }}

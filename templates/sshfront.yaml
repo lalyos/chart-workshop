@@ -1,0 +1,154 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sshfront
+  namespace: workshop
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pubkeyreader
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  resourceNames:
+  - ssh
+  verbs:
+  - get
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: deploylister
+rules:
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - get
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: sshfront-pubkeyreader
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: pubkeyreader
+subjects:
+- kind: ServiceAccount
+  name: sshfront
+  namespace: workshop
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: sshfront-deploylister
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: deploylister
+subjects:
+- kind: ServiceAccount
+  name: sshfront
+  namespace: workshop
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  creationTimestamp: null
+  name: sshfront-pod-reader
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: pod-reader
+subjects:
+- kind: ServiceAccount
+  name: sshfront
+  namespace: workshop
+---
+# apiVersion: rbac.authorization.k8s.io/v1beta1
+# kind: ClusterRoleBinding
+# metadata:
+#   name: crb-sshfront
+# roleRef:
+#   apiGroup: rbac.authorization.k8s.io
+#   kind: ClusterRole
+#   name: admin
+# subjects:
+# - kind: ServiceAccount
+#   name: sshfront
+#   namespace: workshop
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: sshfront
+  name: sshfront
+  namespace: workshop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: sshfront
+  template:
+    metadata:
+      labels:
+        run: sshfront
+    spec:
+      containers:
+      - image: lalyos/k8s-sshfront
+        env:
+        - name: NS
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        name: sshfront
+        command:
+          - sshfront
+          - -d
+          - -e
+          - -a=/ssh-auth.sh
+          - -k=/tmp/id_rsa
+          - /kube-exec.sh
+        ports:
+        - containerPort: 22
+          protocol: TCP
+      restartPolicy: Always
+      serviceAccount: sshfront
+      serviceAccountName: sshfront
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: sshfront
+  name: sshfront
+  namespace: workshop
+spec:
+  ports:
+  - port: 22
+    protocol: TCP
+    targetPort: 22
+  selector:
+    run: sshfront
+  type: NodePort

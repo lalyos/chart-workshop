@@ -1,0 +1,53 @@
+# aggregater cr, so all user can list namespaces and nodes
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    aggregate-to-all-user: "true"
+  name: lister
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  - namespaces
+  verbs:
+  - get
+  - list
+  - watch
+
+# each user is admin in its own namespace
+{{ range $user := until (int .Values.users) }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: owner{{ $user }}
+  namespace: user{{ $user }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admin
+subjects:
+- kind: ServiceAccount
+  name: sa-user{{ $user }}
+  namespace: workshop
+{{end}}
+
+
+# ---
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: ClusterRole
+# metadata:
+#   name: common-config
+# rules:
+# - apiGroups:
+#   - ""
+#   resourceNames:
+#   - common
+#   resources:
+#   - configmaps
+#   verbs:
+#   - list
+#   - get
+#   - watch

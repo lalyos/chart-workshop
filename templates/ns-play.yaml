@@ -1,0 +1,24 @@
+{{ range $user := until (int .Values.users) }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: user{{ $user }}-play
+  labels:
+    user: user{{ $user }}
+spec: {}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: owner
+  namespace: user{{ $user }}-play
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admin
+subjects:
+- kind: ServiceAccount
+  name: sa-user{{ $user }}
+  namespace: workshop
+{{- end }}

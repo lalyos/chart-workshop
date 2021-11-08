@@ -1,0 +1,49 @@
+{{ range $user := until (int .Values.users) }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: user{{ $user }}
+    user: user{{ $user }}
+  name: user{{ $user }}
+  namespace: workshop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user{{ $user }}
+  template:
+    metadata:
+      labels:
+        app: user{{ $user }}
+        run: user{{ $user }} # backward comp with old sshfront
+    spec:
+      serviceAccountName: sa-user{{ $user }}
+      containers:
+      - args:
+        - gotty
+        - "-w"
+        - "--credential=user:$(SECRET)"
+        - "--title-format=user{{ $user }}"
+        #- tmux
+        - bash
+        env:
+          - name: SECRET
+            value: {{ $.Values.secret }}
+          - name: NS
+            value: user{{ $user }}
+          - name: NODE
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: SA
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.serviceAccountName
+          - name: TERM
+            value: xterm
+        image: lalyos/k8s-workshop
+        name: dev
+        resources: {}
+{{ end }}

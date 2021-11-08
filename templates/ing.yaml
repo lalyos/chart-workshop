@@ -1,0 +1,17 @@
+{{ range $user := until (int .Values.users) }}
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.org/websocket-services: frontend{{ $user }}
+  name: ing-{{ $user }}
+spec:
+  rules:
+  - host: user{{ $user }}.{{ $.Values.dns }}
+    http:
+      paths:
+      - backend:
+          serviceName: frontend{{ $user }}
+          servicePort: 8080
+{{ end }}
