@@ -6,6 +6,7 @@ metadata:
   annotations:
     nginx.org/websocket-services: frontend{{ $user }}
   name: ing-{{ $user }}
+  namespace: workshop
 spec:
   rules:
   - host: user{{ $user }}.{{ $.Values.dns }}

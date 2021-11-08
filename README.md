@@ -2,7 +2,8 @@
 This helm chart is usefull for kubernetes workshops, where participants
 
 Todo:
-[ ] integrate automatic route53 entries
+
+- [ ] integrate automatic route53 entries
 
 ## Features
 

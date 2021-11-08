@@ -1,9 +1,9 @@
-# ---
-# apiVersion: v1
-# kind: Namespace
-# metadata:
-#   name: workshop
-# spec: {}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: workshop
+spec: {}
 
 {{ range $user := until (int .Values.users) }}
 ---
