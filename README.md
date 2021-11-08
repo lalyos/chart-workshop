@@ -1,10 +1,6 @@
 
 This helm chart is usefull for kubernetes workshops, where participants
 
-Todo:
-
-- [ ] integrate automatic route53 entries
-
 ## Features
 
 - preinstalled tools: kubectl, helm, jq, jid, micro, ...
@@ -71,9 +67,11 @@ If you own a domain name you need the following entries:
   - n2.mydomain.com
   - n3.mydomain.com
 
-If you don't own a DNS zone, you can useone of:
+If you don't own a DNS zone, you can use one of:
 - https://sslip.io/
 - https://nip.io/
+
+NOTE: previously i used `xip.io`but seemsits dead now...
 
 They will resolv dynamically any ip:
 - 10.0.0.1.nip.io maps to 10.0.0.1
@@ -87,3 +85,7 @@ Run the following command in the browser session:
 ```
 $ ssh-pubkey <your-github-username>
 ```
+
+## Todo
+- [ ] integrate automatic route53 entries
+- [ ] fix ssh-pubkey output to use dns
