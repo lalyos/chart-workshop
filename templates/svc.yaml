@@ -16,3 +16,18 @@ spec:
   selector:
     app: user{{ $user }}
 {{ end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    user: user0
+  name: presenter
+  namespace: workshop
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 2015
+  selector:
+    app: user0
