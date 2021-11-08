@@ -4,7 +4,7 @@ This helm chart is usefull for kubernetes workshops, where participants only nee
 ## Features
 
 - no installation on participants machine (I expect you have a browser)
-- preinstalled tools: kubectl, helm, jq, jid, micro, ...
+- preinstalled tools: kubectl, helm, jq, jid, micro, bat, ...
 - bash-autocompletion for: k, kubectl, helm
 - prompt shows actual ctx and namespace
 - nvim: with k8s yaml support
