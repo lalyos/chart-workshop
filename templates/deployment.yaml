@@ -20,8 +20,15 @@ spec:
         run: user{{ $user }} # backward comp with old sshfront
     spec:
       serviceAccountName: sa-user{{ $user }}
+      volumes:
+      - name: webdav
+        emptyDir: {}
       containers:
-      - args:
+      - name: dev
+        volumeMounts:
+        - name: webdav
+          mountPath: /root/public
+        args:
         - gotty
         - "-w"
         - "--credential=user:$(SECRET)"
@@ -43,7 +50,15 @@ spec:
                 fieldPath: spec.serviceAccountName
           - name: TERM
             value: xterm
-        image: lalyos/k8s-workshop
-        name: dev
+        image: {{ $.Values.image }}
         resources: {}
+      - name: webdav
+        image: {{ $.Values.image }}
+        volumeMounts:
+        - name: webdav
+          mountPath: /root
+        args:
+        - sh
+        - -c
+        - "cd $HOME; /usr/local/bin/caddy webdav"
 {{ end }}
