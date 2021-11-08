@@ -12,7 +12,11 @@ spec:
   - host: user{{ $user }}.{{ $.Values.dns }}
     http:
       paths:
-      - backend:
-          serviceName: frontend{{ $user }}
-          servicePort: 8080
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: frontend{{ $user }}
+            port:
+              number: 8080
 {{ end }}
