@@ -32,7 +32,7 @@ rules:
   - get
   - list
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: pod-reader
@@ -83,19 +83,6 @@ subjects:
 - kind: ServiceAccount
   name: sshfront
   namespace: workshop
----
-# apiVersion: rbac.authorization.k8s.io/v1beta1
-# kind: ClusterRoleBinding
-# metadata:
-#   name: crb-sshfront
-# roleRef:
-#   apiGroup: rbac.authorization.k8s.io
-#   kind: ClusterRole
-#   name: admin
-# subjects:
-# - kind: ServiceAccount
-#   name: sshfront
-#   namespace: workshop
 ---
 apiVersion: apps/v1
 kind: Deployment
