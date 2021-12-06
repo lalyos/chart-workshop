@@ -1,4 +1,4 @@
 dns: k8z.eu
 secret: s3cr3t
 users: 10
-image: lalyos/k8s-workshop:v1.1
+image: lalyos/k8s-workshop:v1.2
