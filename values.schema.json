@@ -1,0 +1,56 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "dns",
+        "secret",
+        "users",
+        "image"
+    ],
+    "properties": {
+        "dns": {
+            "type": "string",
+            "default": "",
+            "title": "The dns Schema",
+            "examples": [
+                "k8z.eu"
+            ]
+        },
+        "secret": {
+            "type": "string",
+            "default": "",
+            "title": "The secret Schema",
+            "examples": [
+                "s3cr3t"
+            ]
+        },
+        "users": {
+            "type": "integer",
+            "default": 0,
+            "title": "The users Schema",
+            "default": 5,
+            "minimum": 2, 
+            "maximum": 16,
+            "examples": [
+                10
+            ]
+        },
+        "image": {
+            "type": "string",
+            "default": "",
+            "title": "The image Schema",
+            "examples": [
+                "lalyos/k8s-workshop:v1.2"
+            ]
+        }
+    },
+    "examples": [{
+        "dns": "k8z.eu",
+        "secret": "s3cr3t",
+        "users": 10,
+        "image": "lalyos/k8s-workshop:v1.2"
+    }]
+}

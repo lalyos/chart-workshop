@@ -1,0 +1,18 @@
+[
+    {
+      "schemaIDs": [
+        "#/properties/dns",
+        "#/properties/secret",
+        "#/properties/image",
+        "#/properties/users"
+      ],
+      "uiSchema": {
+        "#/properties/users": {
+          "ui:widget": "range"
+        }
+      },
+      "metaData": {
+        "name": "Workshop settings"
+      }
+    }
+  ]
